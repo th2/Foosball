@@ -14,9 +14,14 @@ import com.hehmann.domain.Tournament;
 public class FoosballController {
 	private List<Tournament> tournaments = new ArrayList<Tournament>();
 	
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public String showTournamentList(@RequestParam(value="newTournament", required=true) String newTournamentName, Map<String, Object> model) {			
+		tournaments.add(new Tournament(newTournamentName));
+		return showTournamentList(model);
+	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showTournamentList(Map<String, Object> model) {
-		tournaments.add(new Tournament("a"));
 		model.put("tournamentList", tournaments);
 		model.put("test", "test1");
 		return "tournamentList";

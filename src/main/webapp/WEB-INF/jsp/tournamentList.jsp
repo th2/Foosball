@@ -11,8 +11,9 @@
  
 <h1>Kickerturniere</h1>
 
-	<c:if test="${not empty tournamentList}">
-		<ul>
+<ul>
+	<c:choose>
+		<c:when test="${not empty tournamentList}">
 			<c:forEach var="listValue" items="${tournamentList}">
 				<li class="tournamentListItem">
 					<span class="name">${listValue.getName()}</span>
@@ -20,12 +21,22 @@
 					<span class="players">0</span>
 				</li>
 			</c:forEach>
-		</ul>
-	</c:if>
+		</c:when>
+		<c:otherwise>
+			<li class="tournamentListItem">No current tournaments.</li>
+		</c:otherwise>
+	</c:choose>
+	<li class="tournamentListInput">
+		<form method="post"> 	
+			<input type="text" name="newTournament" value="My Tournament" size="60" />
+			<input type="submit" value="add" />
+		</form>
+	</li>
+</ul>
 
 <c:out value="${test}" /><br/>			
 
-<p><a href="/foosball/data/addgreeting.html">Add tournament</a><br/>
+<p><a href="/foosball/addgreeting.html">Add tournament</a><br/>
 
 Stand: <c:out value="<%=new java.util.Date()%>" />
 
