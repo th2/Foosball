@@ -1,17 +1,29 @@
 package com.hehmann.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.hehmann.domain.Tournament;
 
 @Controller
-@RequestMapping("/data")
+@RequestMapping("/")
 public class FoosballController {
+	private List<Tournament> tournaments = new ArrayList<Tournament>();
 	
-	@RequestMapping(value = "/t", method = RequestMethod.GET)
-	public String showT(Map<String, Object> model) {
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String showTournamentList(Map<String, Object> model) {
+		tournaments.add(new Tournament("a"));
+		model.put("tournamentList", tournaments);
+		model.put("test", "test1");
+		return "tournamentList";
+	}
+	
+	@RequestMapping(value = "/data", method = RequestMethod.GET)
+	public String showData(Map<String, Object> model) {
 		model.put("content", "test3");
 		return "data";
 	}

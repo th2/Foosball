@@ -3,19 +3,34 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
  
-	<servlet>
-		<servlet-name>foosball</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+ <servlet>
+	<servlet-name>foosball</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<load-on-startup>1</load-on-startup>
+</servlet>
  
-	<servlet-mapping>
-		<servlet-name>foosball</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>foosball</servlet-name>
+	<url-pattern>/</url-pattern>
+</servlet-mapping>
+	
+<servlet>
+    <servlet-name>StaticFiles</servlet-name>
+    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+    <init-param>
+        <param-name>listings</param-name>
+        <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>StaticFiles</servlet-name>
+	<url-pattern>*.css</url-pattern>
+</servlet-mapping>
  
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener> 
+<listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener> 
  
 </web-app>
