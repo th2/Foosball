@@ -1,0 +1,4 @@
+com\hehmann\web\form\GreetingForm.class
+com\hehmann\domain\Color.class
+com\hehmann\domain\Greeting.class
+com\hehmann\web\controller\FoosballController.class
