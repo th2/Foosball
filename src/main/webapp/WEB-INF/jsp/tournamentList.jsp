@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html><head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  	<title>Foosball Manager</title>
+  	<title>Kickerturnierverwaltung</title>
   	<link rel="stylesheet" type="text/css" href="theme.css">
 </head><body>
  
@@ -18,18 +18,18 @@
 <ul>
 	<c:choose>
 		<c:when test="${not empty tournamentList}">
-			<c:forEach var="listValue" items="${tournamentList}">
-				<a href="${listValue.getName()}">
+			<c:forEach var="tournamentItem" items="${tournamentList}">
+				<a href="${tournamentItem.getKey()}">
 					<li class="tournamentListItem">
-						<span class="name">${listValue.getName()}</span>
-						<span class="status">${listValue.getStatus()}</span>
+						<span class="name">${tournamentItem.getKey()}</span>
+						<span class="status">${tournamentItem.getValue().getStatus()}</span>
 						<span class="players">0</span>
 					</li>
 				</a>
 			</c:forEach>
 		</c:when>
 		<c:otherwise>
-			<li class="tournamentListItem">No current tournaments.</li>
+			<li class="tournamentListItem">Derzeit keine Turniere.</li>
 		</c:otherwise>
 	</c:choose>
 	<li class="tournamentListInput">
@@ -40,7 +40,7 @@
 	</li>
 </ul>	
 
-<p><a href="/foosball/addgreeting.html">Add tournament</a><br/>
+<!--<p><a href="/foosball/addgreeting.html">Add tournament</a><br/>-->
 
 Stand: <c:out value="<%=new java.util.Date()%>" />
 
