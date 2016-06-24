@@ -16,14 +16,17 @@ public class FoosballController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String showTournamentList(@RequestParam(value="newTournament", required=true) String newTournamentName, Map<String, Object> model) {			
-		tournaments.add(new Tournament(newTournamentName));
+		Tournament newTournament = new Tournament(newTournamentName);
+		if(tournaments.contains(newTournament))
+			model.put("message", "Turnier mit Namen \"" + newTournamentName + "\" existiert bereits.");
+		else
+			tournaments.add(newTournament);
 		return showTournamentList(model);
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showTournamentList(Map<String, Object> model) {
 		model.put("tournamentList", tournaments);
-		model.put("test", "test1");
 		return "tournamentList";
 	}
 	

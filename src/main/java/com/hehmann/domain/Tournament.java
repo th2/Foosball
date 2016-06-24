@@ -21,4 +21,11 @@ public class Tournament {
 		this.name = name;
 		status = TournamentStatus.PREPARATION;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(!other.getClass().equals(this.getClass()))
+			return false;
+		return this.getName().equals(((Tournament)other).getName());
+	}
 }
