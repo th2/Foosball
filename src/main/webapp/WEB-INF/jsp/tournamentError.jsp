@@ -9,13 +9,15 @@
   	<link rel="stylesheet" type="text/css" href="theme.css">
 </head><body>
  
-<h1>Kickerturniere</h1>
+<a href="/kicker">
+	<h1>Kickerturniere</h1>
 
-<c:if test="${not empty message}">
-	<br/><c:out value="${message}" /><br/>
-</c:if>	
+	<c:if test="${not empty message}">
+		<br/><c:out value="${message}" /><br/>
+	</c:if>	
 
-<a href="/kicker">zurück</a> <br/>
+	<br/>zurück<br/><br/>
+</a>
 
 Stand: <c:out value="<%=new java.util.Date()%>" />
 

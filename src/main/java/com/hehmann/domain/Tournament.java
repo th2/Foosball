@@ -1,9 +1,13 @@
 package com.hehmann.domain;
 
 public class Tournament {
+	private int id;
 	private String name;
 	private TournamentStatus status;
 
+	public int getId() {
+		return id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -17,9 +21,10 @@ public class Tournament {
 		this.status = status;
 	}
 
-	public Tournament(String name){
+	public Tournament(int id, String name){
+		this.id = id;
 		this.name = name;
-		status = TournamentStatus.PREPARATION;
+		this.status = TournamentStatus.PREPARATION;
 	}
 	
 	@Override

@@ -21,7 +21,7 @@
 			<c:forEach var="tournamentItem" items="${tournamentList}">
 				<a href="${tournamentItem.getKey()}">
 					<li class="tournamentListItem">
-						<span class="name">${tournamentItem.getKey()}</span>
+						<span class="name">${tournamentItem.getValue().getName()}</span>
 						<span class="status">${tournamentItem.getValue().getStatus()}</span>
 						<span class="players">0</span>
 					</li>
