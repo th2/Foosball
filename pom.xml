@@ -5,7 +5,7 @@
   <artifactId>Foosball</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>Foosball Manager</name>
+  <name>Kickerturniere</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -51,14 +51,14 @@
 	</dependency>
   </dependencies>
   <build>
-    <finalName>Foosball</finalName>
+    <finalName>Kicker</finalName>
     <plugins>
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>tomcat-maven-plugin</artifactId>
             <configuration>
                      <server>tomcat9</server>
-                     <path>/foosball</path>
+                     <path>/kicker</path>
                      <url>http://localhost:8080/manager/text</url>
             </configuration>
         </plugin>

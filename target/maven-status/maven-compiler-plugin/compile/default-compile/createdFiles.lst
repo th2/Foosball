@@ -1,8 +1,5 @@
-com\hehmann\domain\Color.class
 com\hehmann\domain\Team.class
 com\hehmann\domain\TournamentStatus.class
-com\hehmann\domain\Tournament.class
-com\hehmann\web\form\GreetingForm.class
-com\hehmann\domain\Greeting.class
 com\hehmann\domain\Player.class
+com\hehmann\domain\Tournament.class
 com\hehmann\web\controller\FoosballController.class

@@ -39,7 +39,7 @@ public class FoosballController {
 	public String showTournamentDetails(Map<String, Object> model, HttpServletRequest request) {
 		String tournamentName;
 		try {
-			tournamentName = URLDecoder.decode(request.getRequestURI().substring(request.getRequestURI().lastIndexOf('/') + 1), "UTF-8");
+			tournamentName = URLDecoder.decode(request.getRequestURI().substring(request.getRequestURI().lastIndexOf('/') + 1), "iso-8859-1");
 		} catch (UnsupportedEncodingException e) {
 			model.put("message", "Ungültiger Turniername.");
 			return "tournamentError";
