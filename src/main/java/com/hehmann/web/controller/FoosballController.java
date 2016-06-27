@@ -72,7 +72,7 @@ public class FoosballController {
 		} catch (NumberFormatException e) {
 			return sendData(model, getDataError(1)); // invalid tournamentId
 		} catch (UnsupportedEncodingException e) {
-			return sendData(model, getDataError(2)); // invalid action
+			return sendData(model, getDataError(2)); // invalid actionEncoding
 		}
 		
 		if(!tournaments.containsKey(tournamentId)) {
@@ -87,8 +87,16 @@ public class FoosballController {
 		JSONObject response = new JSONObject();
 		response.put("tournamentId", tournamentId);
 		response.put("action", action);
-		response.put("tournamentName", tournaments.get(tournamentId).getName());
-		return response;
+		
+		switch(action) {
+			case "info":
+				response.put("tournamentName", tournaments.get(tournamentId).getName());
+				return response;
+			default:
+				return getDataError(3);
+		}
+		
+		
 	}
 	
 	@SuppressWarnings("unchecked")
