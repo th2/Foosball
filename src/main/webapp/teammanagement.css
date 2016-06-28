@@ -1,0 +1,60 @@
+#teamlist {
+	color: white;
+}
+a {
+	color: white;
+}
+[draggable=true] {
+	cursor: move;
+}
+.team {
+	float: left;
+	width: 600px;
+	min-height: 55px;
+	margin: 10px;
+	padding: 10px;
+	border: 1px solid #68ac30;
+	background: #68ac30;
+}
+#pool {
+}
+.teamname {
+	float: left;
+	margin-top: 5px;
+	padding: 5px;
+}
+.player {
+	float: left;
+	margin: 5px;
+	padding: 10px;
+	border-radius: 10px;
+	border: 2px solid #5A9729;
+	background: #7dd543;
+}
+#addteamtext {
+	margin-top: 12px;
+	font-size: 1.2em;
+}
+#newteamname {
+	margin: 15px;
+	font-size: 1em;
+}
+#newplayername {
+	font-size: 1em;
+	width: 270px;
+}
+#newteamname {
+	font-size: 1em;
+	width: 330px;
+}
+button {
+	font-size: 1em;
+}
+#deleteplayer {
+	cursor: pointer;
+	background-color: red;
+	border-color: #d33;
+	height: 25px;
+	padding-top: 13px;
+	padding-bottom: 7px;
+}

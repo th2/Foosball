@@ -6,7 +6,7 @@
 <html><head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   	<title>Kickerturnierverwaltung</title>
-  	<link rel="stylesheet" type="text/css" href="theme.css">
+  	<link rel="stylesheet" type="text/css" href="/kicker/theme.css">
 </head><body>
  
 <h1>Kickerturniere</h1>
