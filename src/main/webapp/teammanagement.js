@@ -39,7 +39,18 @@ function createPlayerNode(teamId, playerId) {
 	newP.ondragstart = function (event) { dragStart(event) }
 	newP.innerHTML = teams[teamId].players[playerId].name
 
-	document.getElementById('pool').appendChild(newP)
+	document.getElementById('team0').appendChild(newP)
+}
+
+function sendToBackend(action, parameters, callback) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			callback(xhttp.responseText)
+		}
+	}
+	xhttp.open('GET', '/kicker/' + tournamentId + '/' + action + '/?' + parameters, true)
+	xhttp.send()
 }
 
 function addTeam(){
@@ -49,20 +60,29 @@ function addTeam(){
 	} else if(teamNameExists(newTeamName)) {
 		alert('Ein Team mit Namen "' + newTeamName + '" existiert bereits.')
 	} else {
-		var newTeamId = 'team' + generatedTeamId++
-		teams[newTeamId] = {
+		teams['team' + generatedTeamId] = {
 			name: newTeamName,
 			players: {}
 		}
-
-		document.getElementById('newteamname').value = ''
-		createTeamNode(newTeamId)
+		
+		document.getElementById('addteambutton').disabled = true
+		
+		sendToBackend('addTeam', 'id=' + generatedTeamId + '&name=' + encodeURI(newTeamName), function (res) {
+			if (res === 'ok') {
+				document.getElementById('addteambutton').disabled = false
+				document.getElementById('newteamname').value = ''
+				createTeamNode('team' + generatedTeamId)
+				generatedTeamId++
+			} else {
+				alert('Erstellen des Teams fehlgeschlagen, bitte laden Sie die Seite neu.');
+			}
+		})
 	}
 }
 
 function deleteTeam(teamId){
 	for (var playerId in teams[teamId].players)
-		movePlayerToTeam(playerId, 'pool')
+		movePlayerToTeam(playerId, 'team0')
 	delete teams[teamId]
 	document.getElementById('teamlist').removeChild(document.getElementById(teamId))
 }
@@ -75,10 +95,10 @@ function addPlayer(){
 		alert('Ein Spieler mit Namen "' + newPlayerName + '" existiert bereits.')
 	} else {
 		var newPlayerId = 'player' + generatedPlayerId++
-		teams['pool'].players[newPlayerId] = { name: newPlayerName }
+		teams['team0'].players[newPlayerId] = { name: newPlayerName }
 
 		document.getElementById('newplayername').value = ''
-		createPlayerNode('pool', newPlayerId)
+		createPlayerNode('team0', newPlayerId)
 	}
 }
 
@@ -99,7 +119,7 @@ function dragStart(ev) {
 function allowDrop(ev) {
     if (ev.target.className === 'team' && 
     	(numberOfPlayers(ev.target.id) < 2 || 
-   		ev.target.id === 'pool'))
+   		ev.target.id === 'team0'))
 	    	ev.preventDefault()
 }
 

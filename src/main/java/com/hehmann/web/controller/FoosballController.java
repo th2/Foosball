@@ -14,74 +14,75 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hehmann.domain.Team;
 import com.hehmann.domain.Tournament;
+import com.hehmann.web.controller.exception.UnkownIdException;
 
 @Controller
 @RequestMapping("/")
 public class FoosballController {
-	private Map<Integer, Tournament> tournaments = new HashMap<Integer, Tournament>();
-	private int newTournamentId = 0;
+	TournamentController tc = new TournamentController();
+	
+	private Tournament getTournamentFromRequest(HttpServletRequest request) throws NumberFormatException, UnkownIdException {
+		String[] parameters = request.getRequestURI().split("/");
+		Integer tournamentId = Integer.parseInt(parameters[2]);
+		return tc.getTournament(tournamentId);
+	}
+	
+	private String checkParameter(String parameter) throws IllegalArgumentException {
+		if(parameter != null && parameter.length() > 0)
+			return parameter;
+		else throw new IllegalArgumentException();
+	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String showTournamentList(@RequestParam(value="newTournament", required=true) String newTournamentName, Map<String, Object> model) {			
-		if(tournaments.containsKey(newTournamentName))
+		if(!tc.createTournament(newTournamentName))
 			model.put("message", "Turnier mit Namen \"" + newTournamentName + "\" existiert bereits.");
-		else {
-			tournaments.put(newTournamentId, new Tournament(newTournamentId, newTournamentName));
-			newTournamentId++;
-		}
 		return showTournamentList(model);
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showTournamentList(Map<String, Object> model) {
-		model.put("tournamentList", tournaments.entrySet());
+		model.put("tournamentList", tc.getTournamentsList());
 		return "tournamentList";
 	}
 	
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
 	public String showTournamentDetails(Map<String, Object> model, HttpServletRequest request) {
-		Integer tournamentId;
+		Tournament tournament;
 		try {
-			String[] parameters = request.getRequestURI().split("/");
-			tournamentId = Integer.parseInt(parameters[2]);
+			tournament = getTournamentFromRequest(request);
 		} catch (NumberFormatException e) {
 			model.put("message", "Ungültige TurnierId.");
 			return "tournamentError";
-		}
-		
-		if(!tournaments.containsKey(tournamentId)) {
+		} catch (UnkownIdException e) {
 			model.put("message", "Unbekannte TurnierId.");
 			return "tournamentError";
 		}
 		
-		model.put("tournament", tournaments.get(tournamentId));
+		model.put("tournament", tournament);
 		return "tournamentView";
 	}
 	
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/**", method = RequestMethod.GET)
+	@RequestMapping(value = "/*/addTeam", method = RequestMethod.GET)
 	public String getTournamentData(Map<String, Object> model, HttpServletRequest request) {
-		Integer tournamentId;
-		String action;
-		
 		try {
-			String[] parameters = request.getRequestURI().split("/");
-			tournamentId = Integer.parseInt(parameters[2]);
-			action = URLDecoder.decode(parameters[3], "iso-8859-1");
-		} catch (NumberFormatException e) {
-			return sendData(model, getDataError(1)); // invalid tournamentId
-		} catch (UnsupportedEncodingException e) {
-			return sendData(model, getDataError(2)); // invalid actionEncoding
-		}
-		
-		if(!tournaments.containsKey(tournamentId)) {
-			return sendData(model, getDataError(0)); // tournamentId not found
-		}
+			int teamId = Integer.parseInt(checkParameter(request.getParameter("id")));
+			String teamName = checkParameter(request.getParameter("name"));
 
-		return sendData(model, getDataResponse(tournamentId, action));
+			getTournamentFromRequest(request).addTeam(new Team(teamId, teamName));
+			
+			model.put("content", "ok");
+			return "data";
+		} catch (IllegalArgumentException e) {
+			model.put("content", "error");
+			return "data";
+		}
 	}
 	
+	
+/*
 	@SuppressWarnings("unchecked")
 	private JSONObject getDataResponse(Integer tournamentId, String action) {
 		JSONObject response = new JSONObject();
@@ -97,8 +98,8 @@ public class FoosballController {
 		}
 		
 		
-	}
-	
+	}*/
+	/*
 	@SuppressWarnings("unchecked")
 	private JSONObject getDataError(Integer errorCode) {
 		JSONObject response = new JSONObject();
@@ -106,25 +107,10 @@ public class FoosballController {
 		return response;
 	}
 
-	private String sendData(Map<String, Object> model, JSONObject response) {
-		model.put("content", response);
-		return "data";
-	}
 	
 	@RequestMapping(value = "/data", method = RequestMethod.GET)
 	public String showData(Map<String, Object> model) {
 		model.put("content", "test3");
 		return "data";
-	}
-	
-	@RequestMapping(value = "/greetings.html", method = RequestMethod.POST)
-	public String showAllGreetings(@RequestParam(value="greetingText", required=true) String greetingText, Map<String, Object> model) {			
-		model.put("greetingText", greetingText);
-		return "greetings";
-	}
-	
-	@RequestMapping(value = "/addgreeting.html", method = RequestMethod.GET)
-	public String showAddGreetingPage() {
-		return "addgreeting";
-	}
+	}*/
 }

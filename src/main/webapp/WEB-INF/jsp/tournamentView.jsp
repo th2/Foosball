@@ -18,7 +18,7 @@
 </nav>
 
 <main id="teamlist">
-	<div id="pool" class="team" ondragover="allowDrop(event)" ondrop="drop(event)">
+	<div id="team0" class="team" ondragover="allowDrop(event)" ondrop="drop(event)">
 		<span class="teamname">Ohne Team <br/><span id="poolcount">6</span> Spieler</span>
 		<p class="player">
 			<input type="text" id="newplayername">
@@ -29,40 +29,25 @@
 	<div id="addteam" class="team">
 		<span id="addteamtext" class="teamname">Neues Team:</span>
 		<input type="text" id="newteamname">
-		<button onclick="addTeam()">hinzufügen</button>
+		<button id="addteambutton" onclick="addTeam()">hinzufügen</button>
 	</div>
 </main>
 <script src="/kicker/teammanagement.js"></script>
 <script>
 	var teams = {
-		pool: {
-			name: 'Ohne Team',
-			players: {
-				player0: { name: 'Name 0' },
-				player1: { name: 'Name 1' },
-				player2: { name: 'Name 2' },
-				player3: { name: 'Name 3' },
-				player4: { name: 'Name 4' },
-				player5: { name: 'Name 5' }
-			}
-		}, 
-		team0: {
-			name: 'The Zeros',
-			players: {}
-		}, 
-		team1: {
-			name: 'Number One',
-			players: {}
-		} 
+		<c:forEach var="teamId" items="${tournament.getTeamIds()}" varStatus="loop">
+			team${teamId}:${tournament.getTeam(teamId).toJSON()}<c:if test="${!loop.last}">,</c:if>
+		</c:forEach>
 	}
 
-	// indices for identifiers used in new team and player object createn
-	var generatedTeamId = 2
-	var generatedPlayerId = 6
+	// indices for identifiers used in new team and player object creation
+	var tournamentId = ${tournament.getId()}
+	var generatedTeamId = ${tournament.getHighestTeamId() + 1}
+	var generatedPlayerId = ${tournament.getHighestPlayerId() + 1}
 
 	// create DOM nodes for elements in data model
 	for (teamId in teams){
-		if (teamId !== 'pool')
+		if (teamId !== 'team0')
 			createTeamNode(teamId)
 		for (playerId in teams[teamId].players){
 			createPlayerNode(teamId, playerId)
