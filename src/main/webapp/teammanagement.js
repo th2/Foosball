@@ -150,7 +150,6 @@ function movePlayerToTeam(playerId, teamId) {
 
 // create DOM nodes for elements in data model
 for (teamId in teams) {
-	console.log(teamId)
 	if (teamId !== 'team0')
 		createTeamNode(teamId)
 	for (playerId in teams[teamId].players){

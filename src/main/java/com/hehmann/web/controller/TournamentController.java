@@ -4,6 +4,9 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.Set;
 
 import com.hehmann.domain.Tournament;
@@ -18,6 +21,12 @@ public class TournamentController {
 		if(tc == null)
 			tc = new TournamentController();
 		return tc;
+	}
+	
+	public Tournament getTournamentFromRequest(HttpServletRequest request) throws NumberFormatException, UnkownIdException {
+		String[] parameters = request.getRequestURI().split("/");
+		Integer tournamentId = Integer.parseInt(parameters[2]);
+		return tc.getTournament(tournamentId);
 	}
 	
 	public Set<Entry<Integer, Tournament>> getTournamentsList() {
