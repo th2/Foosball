@@ -11,10 +11,6 @@ function playerNameExists(needle) {
 	return false
 }
 
-function numberOfPlayers(teamId) {
-	return Object.keys(teams[teamId].players).length
-}
-
 function createTeamNode(teamId) {
 	var newDiv = document.createElement('div')
 	newDiv.id = teamId
@@ -39,7 +35,7 @@ function createPlayerNode(teamId, playerId) {
 	newP.ondragstart = function (event) { dragStart(event) }
 	newP.innerHTML = teams[teamId].players[playerId].name
 
-	document.getElementById('team0').appendChild(newP)
+	document.getElementById(teamId).appendChild(newP)
 }
 
 function sendToBackend(action, parameters, callback) {
@@ -67,7 +63,7 @@ function addTeam(){
 		document.getElementById('addteambutton').disabled = true
 		
 		sendToBackend('addTeam', 'name=' + encodeURI(newTeamName), function (data) {
-			teams['team' +  data.teamId] = { name: data.teamName, players: {} }
+			teams['team' +  data.teamId] = { name: data.teamName, size: 0, players: {} }
 			createTeamNode('team' + data.teamId)
 			document.getElementById('addteambutton').disabled = false
 			document.getElementById('newteamname').value = ''
@@ -96,6 +92,7 @@ function addPlayer(){
 		sendToBackend('addPlayer', 'name=' + newPlayerName, function (data) {
 			teams['team0'].players[ 'player' + data.playerId ] = { name: data.playerName }
 			createPlayerNode('team0', 'player' + data.playerId)
+			document.getElementById('team0count').textContent = ++teams['team0'].size
 			document.getElementById('newplayername').value = ''
 		})
 	}
@@ -104,12 +101,12 @@ function addPlayer(){
 function deletePlayer(playerId){
 	for (var teamId in teams) {
 		if (playerId in teams[teamId].players) {
-			sendToBackend('deletePlayer', 'teamId=' + teamId.substring(4) + 
+			sendToBackend('deletePlayer', 'teamId=' + teamId.substring(4) +
 				'&playerId=' + playerId.substring(6), function (data) {
-				console.log("aaa")
-				delete teams[teamId].players[playerId]
-				document.getElementById(teamId + 'count').textContent = numberOfPlayers(teamId)
-				document.getElementById(playerId).parentElement.removeChild(document.getElementById(playerId))
+				delete teams['team' + data.teamId].players['player' + data.playerId]
+				document.getElementById('team' + data.teamId + 'count').textContent = --teams['team' + data.teamId].size
+				document.getElementById('player' + data.playerId).parentElement.removeChild(
+					document.getElementById('player' + data.playerId))
 			})
 		}
 	}
@@ -121,7 +118,7 @@ function dragStart(ev) {
 
 function allowDrop(ev) {
     if (ev.target.className === 'team' && 
-    	(numberOfPlayers(ev.target.id) < 2 || 
+    	(teams[ev.target.id].size < 2 || 
    		ev.target.id === 'team0'))
 	    	ev.preventDefault()
 }
@@ -136,20 +133,22 @@ function drop(ev) {
 		deletePlayer(playerId)
 }
 
-function movePlayerToTeam(playerId, teamId) {
-	var player = { name: '?' }
-	for (var i in teams) {
-		if (playerId in teams[i].players) {
-			player = teams[i].players[playerId]
-			delete teams[i].players[playerId]
+function movePlayerToTeam(playerId, newTeamId) {
+	for (var oldTeamId in teams) {
+		if ((oldTeamId !== newTeamId) && (playerId in teams[oldTeamId].players)) {
+			sendToBackend('movePlayer', 'oldTeamId=' + oldTeamId.substring(4) +
+				'&playerId=' + playerId.substring(6) +
+				'&newTeamId=' + newTeamId.substring(4), function (data) {
+				delete teams['team' + data.oldTeamId].players['player' + data.playerId]
+				document.getElementById('team' + data.oldTeamId + 'count').textContent = --teams['team' + data.oldTeamId].size
+				
+				teams['team' + data.newTeamId].players['player' + data.playerId] = data.player
+				document.getElementById('team' + data.newTeamId).appendChild(document.getElementById('player' + data.playerId))
+				document.getElementById('team' + data.newTeamId + 'count').textContent = ++teams['team' + data.newTeamId].size
+			})
 
-			document.getElementById(i + 'count').textContent = numberOfPlayers(i)
 		}
 	}
-	teams[teamId].players[playerId] = player
-
-	document.getElementById(teamId).appendChild(document.getElementById(playerId))
-	document.getElementById(teamId + 'count').textContent = numberOfPlayers(teamId)
 }
 
 // create DOM nodes for elements in data model
@@ -158,5 +157,6 @@ for (teamId in teams) {
 		createTeamNode(teamId)
 	for (playerId in teams[teamId].players){
 		createPlayerNode(teamId, playerId)
+		document.getElementById(teamId + 'count').textContent = teams[teamId].size
 	}
 }

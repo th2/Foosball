@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 
 public class Team {
 	private Integer id;
 	private String name;
-	private List<Player> players;
+	private Map<Integer, Player> players;
 	
 	public Team(Integer id, String name) {
 		this.id = id;
 		this.name = name;
-		this.players = new ArrayList<Player>();
+		this.players = new HashMap<Integer, Player>();
 	}
 	
 	public Integer getId() {
@@ -29,18 +30,22 @@ public class Team {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Set<Integer> getPlayerIds() {
+		return players.keySet();
+	}
 	
-	public List<Player> getPlayers() {
-		return players;
+	public Player getPlayer(int playerId) {
+		return players.get(playerId);
 	}
 	
 	public boolean addPlayer(Player player) {
 		if(id != 0 && players.size() > 2)
 			return false;
-		if(players.contains(player))
+		if(players.containsValue(player))
 			return false;
 		
-		players.add(player);
+		players.put(player.getId(), player);
 		return true;
 	}
 	
@@ -60,10 +65,11 @@ public class Team {
 		JSONObject response = new JSONObject();
 		response.put("id", getId());
 		response.put("name", getName());
+		response.put("size", players.keySet().size());
 
 		Map<String, JSONObject> playerJSON = new HashMap<String, JSONObject>();
-		for (Player player : getPlayers()) {
-			playerJSON.put("player" + player.getId(), player.toJSON());
+		for (Integer playerId : players.keySet()) {
+			playerJSON.put("player" + playerId, players.get(playerId).toJSON());
 		}
 		response.put("players", playerJSON);
 		
@@ -72,9 +78,9 @@ public class Team {
 
 	public int getHighestPlayerId() {
 		int max = 0;
-		for (Player player : players) {
-			if (player.getId() > max)
-				max = player.getId();
+		for (int playerId : players.keySet()) {
+			if (playerId > max)
+				max = playerId;
 		}
 		return max;
 	}
