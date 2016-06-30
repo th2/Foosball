@@ -1,20 +1,14 @@
 package com.hehmann.web.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.hehmann.domain.Team;
 import com.hehmann.domain.Tournament;
 import com.hehmann.web.controller.exception.UnkownIdException;
 
@@ -45,7 +39,7 @@ public class FoosballController {
 		try {
 			tournament = tc.getTournamentFromRequest(request);
 		} catch (NumberFormatException e) {
-			model.put("message", "Ungültige TurnierId.");
+			model.put("message", "UngÃ¼ltige TurnierId.");
 			return "tournamentError";
 		} catch (UnkownIdException e) {
 			model.put("message", "Unbekannte TurnierId.");

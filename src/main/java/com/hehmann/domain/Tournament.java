@@ -1,11 +1,6 @@
 package com.hehmann.domain;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,14 +66,6 @@ public class Tournament {
 	
 	public void deleteTeam(Integer teamId) {
 		teams.remove(teamId);
-	}
-	
-	public int getNumberOfPlayers() {
-		int total = 0;
-		for (Integer teamId : teams.keySet()) {
-			total += teams.get(teamId).getPlayers().size();
-		}
-		return total;
 	}
 
 	public Tournament(int id, String name){
