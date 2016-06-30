@@ -46,7 +46,11 @@ function sendToBackend(action, parameters, callback) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
-			callback(xhttp.responseText)
+			var data = JSON.parse(xhttp.responseText)
+			if (data.status === 'ok')
+				callback(data)
+			else
+				alert('Aktion fehlgeschlagen, bitte laden Sie die Seite neu.')
 		}
 	}
 	xhttp.open('GET', '/kicker/' + tournamentId + '/' + action + '/?' + parameters, true)
@@ -62,20 +66,11 @@ function addTeam(){
 	} else {
 		document.getElementById('addteambutton').disabled = true
 		
-		sendToBackend('addTeam', 'name=' + encodeURI(newTeamName), function (res) {
-			var data =  JSON.parse(res);
-			if (data.status === 'ok') {
-				teams['team' +  data.teamId] = {
-					name: data.teamName,
-					players: {}
-				}
-				createTeamNode('team' + data.teamId)
-			
-				document.getElementById('addteambutton').disabled = false
-				document.getElementById('newteamname').value = ''
-			} else {
-				alert('Erstellen des Teams fehlgeschlagen, bitte laden Sie die Seite neu.');
-			}
+		sendToBackend('addTeam', 'name=' + encodeURI(newTeamName), function (data) {
+			teams['team' +  data.teamId] = { name: data.teamName, players: {} }
+			createTeamNode('team' + data.teamId)
+			document.getElementById('addteambutton').disabled = false
+			document.getElementById('newteamname').value = ''
 		})
 	}
 }
@@ -83,8 +78,12 @@ function addTeam(){
 function deleteTeam(teamId){
 	for (var playerId in teams[teamId].players)
 		movePlayerToTeam(playerId, 'team0')
-	delete teams[teamId]
-	document.getElementById('teamlist').removeChild(document.getElementById(teamId))
+	
+	sendToBackend('deleteTeam', 'id=' + teamId.substring(4), function (data) {
+		delete teams['team' +  data.teamId]
+		document.getElementById('teamlist').removeChild(document.getElementById('team' +  data.teamId))
+	})
+		
 }
 
 function addPlayer(){
@@ -150,7 +149,8 @@ function movePlayerToTeam(playerId, teamId) {
 }
 
 // create DOM nodes for elements in data model
-for (teamId in teams){
+for (teamId in teams) {
+	console.log(teamId)
 	if (teamId !== 'team0')
 		createTeamNode(teamId)
 	for (playerId in teams[teamId].players){

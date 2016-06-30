@@ -3,6 +3,8 @@ package com.hehmann.domain;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +21,6 @@ public class Tournament {
 	private Map<Integer, Team> teams = new HashMap<Integer, Team>();
 	private int newTeamId = 0;
 	private int newPlayerId = 0;
-	private List<PrintWriter> listeners = new ArrayList<PrintWriter>();
 
 	public int getId() {
 		return id;
@@ -53,7 +54,7 @@ public class Tournament {
 	}
 	
 	public int createTeam(String teamName) throws DuplicateValueException {
-		Team newTeam = new Team(newTeamId++, teamName + listeners.size());
+		Team newTeam = new Team(newTeamId++, teamName);
 		if(teams.containsValue(newTeam))
 			throw new DuplicateValueException();
 		teams.put(newTeam.getId(), newTeam);
@@ -64,7 +65,7 @@ public class Tournament {
 		teams.get(teamId).addPlayer(new Player(newPlayerId++, playerName));
 	}
 	
-	public void removeTeam(Integer teamId) {
+	public void deleteTeam(Integer teamId) {
 		teams.remove(teamId);
 	}
 	
@@ -99,9 +100,5 @@ public class Tournament {
 		if(!other.getClass().equals(this.getClass()))
 			return false;
 		return this.getName().equals(((Tournament)other).getName());
-	}
-
-	public void registerListener(PrintWriter writer) {
-		listeners.add(writer);
 	}
 }

@@ -67,7 +67,7 @@ public class FoosballController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/*/addTeam", method = RequestMethod.GET)
-	public String getTournamentData(Map<String, Object> model, HttpServletRequest request) {
+	public String addTeam(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {
 			String teamName = checkParameter(request.getParameter("name"));
@@ -83,36 +83,20 @@ public class FoosballController {
 		return "data";
 	}
 	
-	
-/*
 	@SuppressWarnings("unchecked")
-	private JSONObject getDataResponse(Integer tournamentId, String action) {
+	@RequestMapping(value = "/*/deleteTeam", method = RequestMethod.GET)
+	public String deleteTeam(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
-		response.put("tournamentId", tournamentId);
-		response.put("action", action);
-		
-		switch(action) {
-			case "info":
-				response.put("tournamentName", tournaments.get(tournamentId).getName());
-				return response;
-			default:
-				return getDataError(3);
+		try {
+			int teamId = Integer.parseInt(checkParameter(request.getParameter("id")));
+			getTournamentFromRequest(request).deleteTeam(teamId);
+			
+			response.put("status", "ok");
+			response.put("teamId", teamId);
+		} catch (IllegalArgumentException e) {
+			response.put("status", "error");
 		}
-		
-		
-	}*/
-	/*
-	@SuppressWarnings("unchecked")
-	private JSONObject getDataError(Integer errorCode) {
-		JSONObject response = new JSONObject();
-		response.put("error", errorCode);
-		return response;
-	}
-
-	
-	@RequestMapping(value = "/data", method = RequestMethod.GET)
-	public String showData(Map<String, Object> model) {
-		model.put("content", "test3");
+		model.put("content", response);
 		return "data";
-	}*/
+	}
 }
