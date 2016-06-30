@@ -60,19 +60,19 @@ function addTeam(){
 	} else if(teamNameExists(newTeamName)) {
 		alert('Ein Team mit Namen "' + newTeamName + '" existiert bereits.')
 	} else {
-		teams['team' + generatedTeamId] = {
-			name: newTeamName,
-			players: {}
-		}
-		
 		document.getElementById('addteambutton').disabled = true
 		
-		sendToBackend('addTeam', 'id=' + generatedTeamId + '&name=' + encodeURI(newTeamName), function (res) {
-			if (res === 'ok') {
+		sendToBackend('addTeam', 'name=' + encodeURI(newTeamName), function (res) {
+			var data =  JSON.parse(res);
+			if (data.status === 'ok') {
+				teams['team' +  data.teamId] = {
+					name: data.teamName,
+					players: {}
+				}
+				createTeamNode('team' + data.teamId)
+			
 				document.getElementById('addteambutton').disabled = false
 				document.getElementById('newteamname').value = ''
-				createTeamNode('team' + generatedTeamId)
-				generatedTeamId++
 			} else {
 				alert('Erstellen des Teams fehlgeschlagen, bitte laden Sie die Seite neu.');
 			}
@@ -147,4 +147,13 @@ function movePlayerToTeam(playerId, teamId) {
 
 	document.getElementById(teamId).appendChild(document.getElementById(playerId))
 	document.getElementById(teamId + 'count').textContent = numberOfPlayers(teamId)
+}
+
+// create DOM nodes for elements in data model
+for (teamId in teams){
+	if (teamId !== 'team0')
+		createTeamNode(teamId)
+	for (playerId in teams[teamId].players){
+		createPlayerNode(teamId, playerId)
+	}
 }

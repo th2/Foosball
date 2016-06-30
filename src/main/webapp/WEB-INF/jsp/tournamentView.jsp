@@ -32,28 +32,11 @@
 		<button id="addteambutton" onclick="addTeam()">hinzufügen</button>
 	</div>
 </main>
-<script src="/kicker/teammanagement.js"></script>
 <script>
-	var teams = {
-		<c:forEach var="teamId" items="${tournament.getTeamIds()}" varStatus="loop">
-			team${teamId}:${tournament.getTeam(teamId).toJSON()}<c:if test="${!loop.last}">,</c:if>
-		</c:forEach>
-	}
-
-	// indices for identifiers used in new team and player object creation
+	var teams = ${tournament.toJSON()}
 	var tournamentId = ${tournament.getId()}
-	var generatedTeamId = ${tournament.getHighestTeamId() + 1}
-	var generatedPlayerId = ${tournament.getHighestPlayerId() + 1}
-
-	// create DOM nodes for elements in data model
-	for (teamId in teams){
-		if (teamId !== 'team0')
-			createTeamNode(teamId)
-		for (playerId in teams[teamId].players){
-			createPlayerNode(teamId, playerId)
-		}
-	}
 </script>
+<script src="/kicker/teammanagement.js"></script>
 
 <!--<footer class="clear">Stand: <c:out value="<%=new java.util.Date()%>" /></footer>-->
 

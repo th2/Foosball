@@ -1,5 +1,6 @@
 package com.hehmann.web.controller;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,8 +10,15 @@ import com.hehmann.domain.Tournament;
 import com.hehmann.web.controller.exception.UnkownIdException;
 
 public class TournamentController {
+	private static TournamentController tc;
 	private Map<Integer, Tournament> tournaments = new HashMap<Integer, Tournament>();
 	private int newTournamentId = 0;
+	
+	public static TournamentController getInstance(){
+		if(tc == null)
+			tc = new TournamentController();
+		return tc;
+	}
 	
 	public Set<Entry<Integer, Tournament>> getTournamentsList() {
 		return tournaments.entrySet();

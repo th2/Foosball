@@ -1,7 +1,9 @@
 package com.hehmann.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
@@ -54,17 +56,18 @@ public class Team {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public String toJSON() {
+	public JSONObject toJSON() {
 		JSONObject response = new JSONObject();
 		response.put("id", getId());
 		response.put("name", getName());
-		List<String> playerJSON = new ArrayList<String>();
-		for(Player player : getPlayers()){
-			playerJSON.add("player" + player.getId() + ":" + player.toJSON());
+
+		Map<String, JSONObject> playerJSON = new HashMap<String, JSONObject>();
+		for (Player player : getPlayers()) {
+			playerJSON.put("player" + player.getId(), player.toJSON());
 		}
 		response.put("players", playerJSON);
 		
-		return response.toString();
+		return response;
 	}
 
 	public int getHighestPlayerId() {

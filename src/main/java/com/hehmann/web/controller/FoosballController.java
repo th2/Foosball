@@ -21,7 +21,7 @@ import com.hehmann.web.controller.exception.UnkownIdException;
 @Controller
 @RequestMapping("/")
 public class FoosballController {
-	TournamentController tc = new TournamentController();
+	TournamentController tc = TournamentController.getInstance();
 	
 	private Tournament getTournamentFromRequest(HttpServletRequest request) throws NumberFormatException, UnkownIdException {
 		String[] parameters = request.getRequestURI().split("/");
@@ -65,20 +65,22 @@ public class FoosballController {
 		return "tournamentView";
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/*/addTeam", method = RequestMethod.GET)
 	public String getTournamentData(Map<String, Object> model, HttpServletRequest request) {
+		JSONObject response = new JSONObject();
 		try {
-			int teamId = Integer.parseInt(checkParameter(request.getParameter("id")));
 			String teamName = checkParameter(request.getParameter("name"));
-
-			getTournamentFromRequest(request).addTeam(new Team(teamId, teamName));
+			int teamId = getTournamentFromRequest(request).createTeam(teamName);
 			
-			model.put("content", "ok");
-			return "data";
+			response.put("status", "ok");
+			response.put("teamId", teamId);
+			response.put("teamName", teamName);
 		} catch (IllegalArgumentException e) {
-			model.put("content", "error");
-			return "data";
+			response.put("status", "error");
 		}
+		model.put("content", response);
+		return "data";
 	}
 	
 	

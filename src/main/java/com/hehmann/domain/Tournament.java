@@ -1,10 +1,13 @@
 package com.hehmann.domain;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.json.simple.JSONObject;
 
 import com.hehmann.web.controller.exception.DuplicateValueException;
 import com.hehmann.web.controller.exception.UnkownIdException;
@@ -14,6 +17,9 @@ public class Tournament {
 	private String name;
 	private TournamentStatus status;
 	private Map<Integer, Team> teams = new HashMap<Integer, Team>();
+	private int newTeamId = 0;
+	private int newPlayerId = 0;
+	private List<PrintWriter> listeners = new ArrayList<PrintWriter>();
 
 	public int getId() {
 		return id;
@@ -46,10 +52,16 @@ public class Tournament {
 			throw new UnkownIdException();
 	}
 	
-	public void addTeam(Team team) throws DuplicateValueException {
-		if(teams.containsKey(team.getId()) || teams.containsValue(team))
+	public int createTeam(String teamName) throws DuplicateValueException {
+		Team newTeam = new Team(newTeamId++, teamName + listeners.size());
+		if(teams.containsValue(newTeam))
 			throw new DuplicateValueException();
-		teams.put(team.getId(), team);
+		teams.put(newTeam.getId(), newTeam);
+		return newTeam.getId();
+	}
+	
+	public void createPlayer(int teamId, String playerName) {
+		teams.get(teamId).addPlayer(new Player(newPlayerId++, playerName));
 	}
 	
 	public void removeTeam(Integer teamId) {
@@ -63,31 +75,23 @@ public class Tournament {
 		}
 		return total;
 	}
-	
-	public int getHighestTeamId() {
-		int max = 0;
-		for (Integer teamId : teams.keySet()) {
-			if (teamId > max)
-				max = teamId;
-		}
-		return max;
-	}
-	
-	public int getHighestPlayerId() {
-		int max = 0;
-		for (Integer teamId : teams.keySet()) {
-			int maxPlayerId = teams.get(teamId).getHighestPlayerId();
-			if (maxPlayerId > max)
-				max = maxPlayerId;
-		}
-		return max;
-	}
 
 	public Tournament(int id, String name){
 		this.id = id;
 		this.name = name;
 		this.status = TournamentStatus.PREPARATION;
-		this.addTeam(new Team(0, "Ohne Team"));
+		this.createTeam("Ohne Team");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSON() {
+		JSONObject response = new JSONObject();
+		Map<String, JSONObject> teamJSON = new HashMap<String, JSONObject>();
+		for(Integer teamId : getTeamIds())
+			teamJSON.put("team" + teamId, teams.get(teamId).toJSON());
+		response.putAll(teamJSON);
+		
+		return response;
 	}
 	
 	@Override
@@ -95,5 +99,9 @@ public class Tournament {
 		if(!other.getClass().equals(this.getClass()))
 			return false;
 		return this.getName().equals(((Tournament)other).getName());
+	}
+
+	public void registerListener(PrintWriter writer) {
+		listeners.add(writer);
 	}
 }
