@@ -44,8 +44,8 @@ public class Team {
 		return true;
 	}
 	
-	public boolean removePlayer(Player player) {
-		return players.remove(player);
+	public Player deletePlayer(int playerId) {
+		return players.remove(playerId);
 	}
 
 	@Override

@@ -104,11 +104,15 @@ function addPlayer(){
 function deletePlayer(playerId){
 	for (var teamId in teams) {
 		if (playerId in teams[teamId].players) {
-			delete teams[teamId].players[playerId]
-			document.getElementById(teamId + 'count').textContent = numberOfPlayers(teamId)
+			sendToBackend('deletePlayer', 'teamId=' + teamId.substring(4) + 
+				'&playerId=' + playerId.substring(6), function (data) {
+				console.log("aaa")
+				delete teams[teamId].players[playerId]
+				document.getElementById(teamId + 'count').textContent = numberOfPlayers(teamId)
+				document.getElementById(playerId).parentElement.removeChild(document.getElementById(playerId))
+			})
 		}
 	}
-	document.getElementById(playerId).parentElement.removeChild(document.getElementById(playerId))
 }
 
 function dragStart(ev) {

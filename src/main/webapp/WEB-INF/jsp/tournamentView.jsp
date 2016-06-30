@@ -19,7 +19,7 @@
 
 <main id="teamlist">
 	<div id="team0" class="team" ondragover="allowDrop(event)" ondrop="drop(event)">
-		<span class="teamname">Ohne Team <br/><span id="poolcount">6</span> Spieler</span>
+		<span class="teamname">Ohne Team <br/><span id="team0count">6</span> Spieler</span>
 		<p class="player">
 			<input type="text" id="newplayername">
 			<button onclick="addPlayer()">hinzufügen</button>

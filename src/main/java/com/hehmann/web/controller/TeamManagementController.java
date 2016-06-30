@@ -69,4 +69,22 @@ public class TeamManagementController {
 		model.put("content", response);
 		return "data";
 	}
+	
+	@RequestMapping(value = "/*/deletePlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
+	public String deletePlayer(Map<String, Object> model, HttpServletRequest request) {
+		JSONObject response = new JSONObject();
+		try {
+			int teamId = Integer.parseInt(checkParameter(request.getParameter("teamId")));
+			int playerId = Integer.parseInt(checkParameter(request.getParameter("playerId")));
+			tc.getTournamentFromRequest(request).getTeam(teamId).deletePlayer(playerId);
+			
+			response.put("status", "ok");
+		} catch (IllegalArgumentException e) {
+			response.put("status", "error");
+		} catch (IndexOutOfBoundsException e) {
+			response.put("status", "error");
+		}
+		model.put("content", response);
+		return "data";
+	}
 }
