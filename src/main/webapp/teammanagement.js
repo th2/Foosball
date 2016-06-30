@@ -21,7 +21,7 @@ function createTeamNode(teamId) {
 	var newSpan = document.createElement('span')
 	newSpan.className = 'teamname'
 	newSpan.innerHTML = teams[teamId].name + '<br/><span id="' + teamId + 'count">0</span>/2 Spieler | ' +
-	'<a href="#" onclick="deleteTeam(\'' + teamId + '\')">löschen</a></span>'
+	'<a href="#" onclick="deleteTeam(\'' + teamId + '\')">entfernen</a></span>'
 
 	newDiv.appendChild(newSpan)
 	document.getElementById('teamlist').insertBefore(newDiv, document.getElementById('addteam'))

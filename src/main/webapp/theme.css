@@ -8,14 +8,12 @@ body {
 	margin: auto;
 	padding: 20px;
 }
-header {
-	margin: 10px;
+.clear {
+	clear: both;
 }
-nav {
-	margin: 10px;
-}
-footer {
-	margin: 10px;
+a {
+	text-decoration: none;
+	color: #000;
 }
 ul {
 	list-style: none;
@@ -24,10 +22,15 @@ ul {
 li {
 	padding-bottom: 10px;
 }
-a {
-	text-decoration: none;
-	color: #000;
+header {
+	margin: 10px;
 }
-.clear {
-	clear: both;
+nav {
+	margin: 10px;
+}
+.navactive {
+	font-weight: bold;
+}
+footer {
+	margin: 10px;
 }

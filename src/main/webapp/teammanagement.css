@@ -1,7 +1,7 @@
 #teamlist {
 	color: white;
 }
-a {
+#teamlist a{
 	color: white;
 }
 [draggable=true] {
