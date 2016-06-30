@@ -20,8 +20,7 @@ public class TeamManagementController {
 		else throw new IllegalArgumentException();
 	}
 	
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/*/addTeam", method = RequestMethod.GET)
+	@RequestMapping(value = "/*/addTeam", method = RequestMethod.GET) @SuppressWarnings("unchecked")
 	public String addTeam(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {
@@ -38,8 +37,7 @@ public class TeamManagementController {
 		return "data";
 	}
 	
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/*/deleteTeam", method = RequestMethod.GET)
+	@RequestMapping(value = "/*/deleteTeam", method = RequestMethod.GET) @SuppressWarnings("unchecked")
 	public String deleteTeam(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {
@@ -48,6 +46,23 @@ public class TeamManagementController {
 			
 			response.put("status", "ok");
 			response.put("teamId", teamId);
+		} catch (IllegalArgumentException e) {
+			response.put("status", "error");
+		}
+		model.put("content", response);
+		return "data";
+	}
+	
+	@RequestMapping(value = "/*/addPlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
+	public String addPlayer(Map<String, Object> model, HttpServletRequest request) {
+		JSONObject response = new JSONObject();
+		try {
+			String playerName = checkParameter(request.getParameter("name"));
+			int playerId = tc.getTournamentFromRequest(request).createPlayer(playerName);
+			
+			response.put("status", "ok");
+			response.put("playerId", playerId);
+			response.put("playerName", playerName);
 		} catch (IllegalArgumentException e) {
 			response.put("status", "error");
 		}

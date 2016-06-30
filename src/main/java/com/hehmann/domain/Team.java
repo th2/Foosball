@@ -35,7 +35,7 @@ public class Team {
 	}
 	
 	public boolean addPlayer(Player player) {
-		if(players.size() > 2)
+		if(id != 0 && players.size() > 2)
 			return false;
 		if(players.contains(player))
 			return false;

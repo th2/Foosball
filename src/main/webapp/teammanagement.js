@@ -93,11 +93,11 @@ function addPlayer(){
 	} else if(playerNameExists(newPlayerName)) {
 		alert('Ein Spieler mit Namen "' + newPlayerName + '" existiert bereits.')
 	} else {
-		var newPlayerId = 'player' + generatedPlayerId++
-		teams['team0'].players[newPlayerId] = { name: newPlayerName }
-
-		document.getElementById('newplayername').value = ''
-		createPlayerNode('team0', newPlayerId)
+		sendToBackend('addPlayer', 'name=' + newPlayerName, function (data) {
+			teams['team0'].players[ 'player' + data.playerId ] = { name: data.playerName }
+			createPlayerNode('team0', 'player' + data.playerId)
+			document.getElementById('newplayername').value = ''
+		})
 	}
 }
 

@@ -23,19 +23,22 @@ import com.hehmann.web.controller.exception.UnkownIdException;
 public class FoosballController {
 	TournamentController tc = TournamentController.getInstance();
 	
+	// serve list of tournaments and process new tournament creation requests
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String showTournamentList(@RequestParam(value="newTournament", required=true) String newTournamentName, Map<String, Object> model) {			
 		if(!tc.createTournament(newTournamentName))
 			model.put("message", "Turnier mit Namen \"" + newTournamentName + "\" existiert bereits.");
 		return showTournamentList(model);
 	}
-	
+
+	// serve list of tournaments
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showTournamentList(Map<String, Object> model) {
 		model.put("tournamentList", tc.getTournamentsList());
 		return "tournamentList";
 	}
 	
+	// serve tournament details page
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
 	public String showTournamentDetails(Map<String, Object> model, HttpServletRequest request) {
 		Tournament tournament;

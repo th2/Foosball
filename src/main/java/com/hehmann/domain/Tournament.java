@@ -61,8 +61,12 @@ public class Tournament {
 		return newTeam.getId();
 	}
 	
-	public void createPlayer(int teamId, String playerName) {
-		teams.get(teamId).addPlayer(new Player(newPlayerId++, playerName));
+	public int createPlayer(String playerName) throws IllegalArgumentException {
+		Player newPlayer = new Player(newPlayerId++, playerName);
+		if(teams.get(0).addPlayer(newPlayer))
+			return newPlayer.getId();
+		else
+			throw new IllegalArgumentException();
 	}
 	
 	public void deleteTeam(Integer teamId) {
