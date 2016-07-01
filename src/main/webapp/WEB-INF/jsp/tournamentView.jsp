@@ -43,7 +43,7 @@
 			<summary>Turniereigenschaften</summary>
 			<p>
 				<label for="numtables">Anzahl Tische: </label><input id="numtables" type="number" value="1"/><br/>
-				Spielmodus: <select>
+				Spielmodus: <select id="matchmode">
 					<option value="0" selected>Jeder gegen Jeden</option>
 					<option value="1">2 Gruppen mit Halbfinale und Finale</option>
 					<option value="2">4 Gruppen mit Viertelfinale, Halbfinale und Finale</option>
