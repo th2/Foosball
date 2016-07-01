@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.hehmann.domain.Player;
 
 @Controller
-@RequestMapping("/*/*")
+@RequestMapping("/*/team/*")
 public class TeamManagementController {
 	TournamentController tc = TournamentController.getInstance();
 	
@@ -22,7 +22,7 @@ public class TeamManagementController {
 		else throw new IllegalArgumentException();
 	}
 	
-	@RequestMapping(value = "/*/addTeam", method = RequestMethod.GET) @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/*/team/addTeam", method = RequestMethod.GET) @SuppressWarnings("unchecked")
 	public String addTeam(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {
@@ -39,7 +39,7 @@ public class TeamManagementController {
 		return "data";
 	}
 	
-	@RequestMapping(value = "/*/deleteTeam", method = RequestMethod.GET) @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/*/team/deleteTeam", method = RequestMethod.GET) @SuppressWarnings("unchecked")
 	public String deleteTeam(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {
@@ -55,7 +55,7 @@ public class TeamManagementController {
 		return "data";
 	}
 	
-	@RequestMapping(value = "/*/addPlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/*/team/addPlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
 	public String addPlayer(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {
@@ -72,7 +72,7 @@ public class TeamManagementController {
 		return "data";
 	}
 	
-	@RequestMapping(value = "/*/deletePlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/*/team/deletePlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
 	public String deletePlayer(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {
@@ -92,7 +92,7 @@ public class TeamManagementController {
 		return "data";
 	}
 	
-	@RequestMapping(value = "/*/movePlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/*/team/movePlayer", method = RequestMethod.GET) @SuppressWarnings("unchecked")
 	public String movePlayer(Map<String, Object> model, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {

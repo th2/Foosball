@@ -9,7 +9,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   	<title>${tournament.getName()}</title>
   	<link rel="stylesheet" type="text/css" href="/kicker/theme.css">
-	<link rel="stylesheet" type="text/css" href="/kicker/teammanagement.css">
+	<link rel="stylesheet" type="text/css" href="/kicker/team.css">
+	<link rel="stylesheet" type="text/css" href="/kicker/match.css">
 </head><body>
 <header>
 	<h1>${tournament.getName()}</h1>
@@ -38,10 +39,21 @@
 		</div>
 	</article>
 	<article id="matchlist" style="display:none;">
-		aaaa
+		<details open="open">
+			<summary>Turniereigenschaften</summary>
+			<p>
+				<label for="numtables">Anzahl Tische: </label><input id="numtables" type="number" value="1"/><br/>
+				Spielmodus: <select>
+					<option value="0" selected>Jeder gegen Jeden</option>
+					<option value="1">2 Gruppen mit Halbfinale und Finale</option>
+					<option value="2">4 Gruppen mit Viertelfinale, Halbfinale und Finale</option>
+				</select><br/>
+				<button id="generatebutton" onclick="generateMatches()">Spielplan generieren</button><br/>
+			</p>
+		</details>
 	</article>
 	<article id="ranklist" style="display:none;">
-		bbbb
+		Team | Spieler | Spiele | Punkte | Tordifferenz | Tore | Gegentore
 	</article>
 </main>
 <script>
@@ -73,7 +85,9 @@
 	var teams = ${tournament.toJSON()}
 	var tournamentId = ${tournament.getId()}
 </script>
-<script src="/kicker/teammanagement.js"></script>
+<script src="/kicker/communication.js"></script>
+<script src="/kicker/team.js"></script>
+<script src="/kicker/match.js"></script>
 
 <!--<footer class="clear">Stand: <c:out value="<%=new java.util.Date()%>" /></footer>-->
 
